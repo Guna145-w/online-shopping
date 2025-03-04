@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Online Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Redirect to login page if not logged in
+        window.onload = function() {
+            if (sessionStorage.getItem("loggedIn") !== "true") {
+                window.location.href = "login.html";
+            } else {
+                // Display the logged-in username
+                const username = sessionStorage.getItem("username");
+                document.getElementById("welcome-message").textContent = `Welcome, ${username}!`;
+            }
+        };
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem("loggedIn");
+            sessionStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+
+        // Add product to cart
+        function addToCart(productName, price) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push({ name: productName, price: price });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert(productName + " added to cart!");
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Online Shop</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><button onclick="logout()">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <h2 id="welcome-message">Welcome!</h2>
+        <h2>Featured Products</h2>
+        <div class="product-listing">
+            <div class="product">
+                <img src="product1.jpg" alt="Product 1">
+                <h3>Product 1</h3>
+                <p>$10.00</p>
+                <button onclick="addToCart('Product 1', 10)">Add to Cart</button>
+            </div>
+            <div class="product">
+                <img src="product2.jpg" alt="Product 2">
+                <h3>Product 2</h3>
+                <p>$15.00</p>
+                <button onclick="addToCart('Product 2', 15)">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

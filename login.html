@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Online Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Function to create a new account
+        function createAccount() {
+            const newUsername = document.getElementById("new-username").value;
+            const newPassword = document.getElementById("new-password").value;
+
+            if (!newUsername || !newPassword) {
+                alert("Please enter a username and password.");
+                return;
+            }
+
+            // Check if the username already exists
+            const accounts = JSON.parse(localStorage.getItem("accounts")) || {};
+            if (accounts[newUsername]) {
+                alert("Username already exists. Please choose a different username.");
+                return;
+            }
+
+            // Save the new account
+            accounts[newUsername] = { password: newPassword };
+            localStorage.setItem("accounts", JSON.stringify(accounts));
+            alert("Account created successfully! Please log in.");
+            showLoginForm();
+        }
+
+        // Function to log in
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Retrieve accounts from localStorage
+            const accounts = JSON.parse(localStorage.getItem("accounts")) || {};
+
+            // Check if the username exists and the password matches
+            if (accounts[username] && accounts[username].password === password) {
+                sessionStorage.setItem("loggedIn", "true");
+                sessionStorage.setItem("username", username); // Save the logged-in username
+                window.location.href = "index.html";
+            } else {
+                alert("Invalid username or password. Please try again.");
+            }
+        }
+
+        // Function to switch between login and create account forms
+        function showCreateAccountForm() {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("create-account-form").style.display = "block";
+        }
+
+        function showLoginForm() {
+            document.getElementById("create-account-form").style.display = "none";
+            document.getElementById("login-form").style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Online Shop</h1>
+    </header>
+    <section>
+        <h2>Login</h2>
+        <div id="login-form">
+            <form onsubmit="event.preventDefault(); login();">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="showCreateAccountForm()">Create one</a>.</p>
+        </div>
+
+        <div id="create-account-form" style="display: none;">
+            <h2>Create Account</h2>
+            <form onsubmit="event.preventDefault(); createAccount();">
+                <label for="new-username">Username:</label>
+                <input type="text" id="new-username" name="new-username" required>
+                <br>
+                <label for="new-password">Password:</label>
+                <input type="password" id="new-password" name="new-password" required>
+                <br>
+                <button type="submit">Create Account</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="showLoginForm()">Log in</a>.</p>
+        </div>
+    </section>
+</body>
+</html>
